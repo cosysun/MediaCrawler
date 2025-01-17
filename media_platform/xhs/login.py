@@ -14,6 +14,7 @@ import functools
 import sys
 from typing import Optional
 
+from matplotlib.pylab import f
 from playwright.async_api import BrowserContext, Page
 from tenacity import (RetryError, retry, retry_if_result, stop_after_attempt,
                       wait_fixed)
@@ -189,9 +190,11 @@ class XiaoHongShuLogin(AbstractLogin):
         for key, value in utils.convert_str_cookie_to_dict(self.cookie_str).items():
             if key != "web_session":  # only set web_session cookie attr
                 continue
+            print(f"[XiaoHongShuLogin.login_by_cookies] set cookie key: {key} value: {value}")
             await self.browser_context.add_cookies([{
                 'name': key,
                 'value': value,
                 'domain': ".xiaohongshu.com",
                 'path': "/"
             }])
+        await self.context_page.reload()

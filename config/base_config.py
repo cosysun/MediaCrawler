@@ -13,7 +13,7 @@
 PLATFORM = "xhs"
 KEYWORDS = "编程副业,编程兼职"  # 关键词搜索配置，以英文逗号分隔
 LOGIN_TYPE = "qrcode"  # qrcode or phone or cookie
-COOKIES = ""
+COOKIES = "abRequestId=b374af03-afec-51aa-8530-844473aac356;webBuild=4.55.0;xsecappid=xhs-pc-web;a1=194737ecefdtm6b10g5m34163ae2tp0z3kdu1gdyq50000412498;webId=002463bd864a566f9fb49865a875632c;gid=yj4WqWdfD2qYyj4WqWdSdTkfif96KDy8k26qfvA4yKq0d728J9U8uy8884yJ4jY8KKW0i4Dq;acw_tc=0a00daeb17371067406525762e2f512010fd8c25e088b2d8be173425470a56;unread={%22ub%22:%226768c563000000000800c4f6%22%2C%22ue%22:%22676cae1a000000000900c327%22%2C%22uc%22:32};websectiga=3633fe24d49c7dd0eb923edc8205740f10fdb18b25d424d2a2322c6196d2a4ad;sec_poison_id=205a7167-8444-4f04-91f1-2def8c976db5;web_session=0400694b8b14ca53ac353c61bf354b668dc766"
 # 具体值参见media_platform.xxx.field下的枚举值，暂时只支持小红书
 SORT_TYPE = "popularity_descending"
 # 具体值参见media_platform.xxx.field下的枚举值，暂时只支持抖音
