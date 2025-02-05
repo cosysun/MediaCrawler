@@ -1,18 +1,4 @@
-# 声明：本代码仅供学习和研究目的使用。使用者应遵守以下原则：  
-# 1. 不得用于任何商业用途。  
-# 2. 使用时应遵守目标平台的使用条款和robots.txt规则。  
-# 3. 不得进行大规模爬取或对平台造成运营干扰。  
-# 4. 应合理控制请求频率，避免给目标平台带来不必要的负担。   
-# 5. 不得用于任何非法或不当的用途。
-#   
-# 详细许可条款请参阅项目根目录下的LICENSE文件。  
-# 使用本代码即表示您同意遵守上述原则和LICENSE中的所有条款。  
-
-
 # -*- coding: utf-8 -*-
-# @Author  : relakkes@gmail.com
-# @Time    : 2024/1/14 16:58
-# @Desc    : 小红书存储实现类
 import asyncio
 import csv
 import json
@@ -45,7 +31,7 @@ def calculate_number_of_files(file_store_path: str) -> int:
 
 class XhsCsvStoreImplement(AbstractStore):
     csv_store_path: str = "data/xhs"
-    file_count:int=calculate_number_of_files(csv_store_path)
+    file_count: int = calculate_number_of_files(csv_store_path)
 
     def make_save_file_name(self, store_type: str) -> str:
         """
@@ -176,10 +162,10 @@ class XhsJsonStoreImplement(AbstractStore):
     json_store_path: str = "data/xhs/json"
     words_store_path: str = "data/xhs/words"
     lock = asyncio.Lock()
-    file_count:int=calculate_number_of_files(json_store_path)
+    file_count: int = calculate_number_of_files(json_store_path)
     WordCloud = words.AsyncWordCloudGenerator()
 
-    def make_save_file_name(self, store_type: str) -> (str,str):
+    def make_save_file_name(self, store_type: str) -> (str, str):
         """
         make save file name by store type
         Args:
@@ -206,7 +192,8 @@ class XhsJsonStoreImplement(AbstractStore):
         """
         pathlib.Path(self.json_store_path).mkdir(parents=True, exist_ok=True)
         pathlib.Path(self.words_store_path).mkdir(parents=True, exist_ok=True)
-        save_file_name,words_file_name_prefix = self.make_save_file_name(store_type=store_type)
+        save_file_name, words_file_name_prefix = self.make_save_file_name(
+            store_type=store_type)
         save_data = []
 
         async with self.lock:
@@ -223,6 +210,7 @@ class XhsJsonStoreImplement(AbstractStore):
                     await self.WordCloud.generate_word_frequency_and_cloud(save_data, words_file_name_prefix)
                 except:
                     pass
+
     async def store_content(self, content_item: Dict):
         """
         content JSON storage implementation

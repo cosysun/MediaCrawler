@@ -12,14 +12,14 @@
 # 基础配置
 PLATFORM = "xhs"
 KEYWORDS = "编程副业,编程兼职"  # 关键词搜索配置，以英文逗号分隔
-LOGIN_TYPE = "qrcode"  # qrcode or phone or cookie
-COOKIES = "abRequestId=b374af03-afec-51aa-8530-844473aac356;webBuild=4.55.0;xsecappid=xhs-pc-web;a1=194737ecefdtm6b10g5m34163ae2tp0z3kdu1gdyq50000412498;webId=002463bd864a566f9fb49865a875632c;gid=yj4WqWdfD2qYyj4WqWdSdTkfif96KDy8k26qfvA4yKq0d728J9U8uy8884yJ4jY8KKW0i4Dq;acw_tc=0a00daeb17371067406525762e2f512010fd8c25e088b2d8be173425470a56;unread={%22ub%22:%226768c563000000000800c4f6%22%2C%22ue%22:%22676cae1a000000000900c327%22%2C%22uc%22:32};websectiga=3633fe24d49c7dd0eb923edc8205740f10fdb18b25d424d2a2322c6196d2a4ad;sec_poison_id=205a7167-8444-4f04-91f1-2def8c976db5;web_session=0400694b8b14ca53ac353c61bf354b668dc766"
+LOGIN_TYPE = "cookie"  # qrcode or phone or cookie
+COOKIES = "acw_tc=0a00d86f17384716962788648e3e297bd873d910b7ee532b9fb8a7b10a5819;abRequestId=42fef2fd-9b27-5ea4-b22b-2a138dcdd5b6;webBuild=4.55.1;a1=194c4fcecf0a3kd61ryk7qif88w1ahlj4b4qdt9tb30000283450;webId=85076ba1b03667240310e68cc9fc080c;websectiga=3fff3a6f9f07284b62c0f2ebf91a3b10193175c06e4f71492b60e056edcdebb2;sec_poison_id=8667f086-4946-4b61-998a-59fde9406a15;gid=yj4S4iSif84fyj4S4iSdSD9ji80qTfKyFvTW49DA3iYYEAq8y0x1Vf888JYq4288yjYijDyf;web_session=0400694b8b14ca53ac3542b1ab354bea25477d;xsecappid=xhs-pc-web"
 # 具体值参见media_platform.xxx.field下的枚举值，暂时只支持小红书
 SORT_TYPE = "popularity_descending"
 # 具体值参见media_platform.xxx.field下的枚举值，暂时只支持抖音
 PUBLISH_TIME_TYPE = 0
 CRAWLER_TYPE = (
-    "search"  # 爬取类型，search(关键词搜索) | detail(帖子详情)| creator(创作者主页数据)
+    "creator"  # 爬取类型，search(关键词搜索) | detail(帖子详情)| creator(创作者主页数据)
 )
 # 自定义User Agent（暂时仅对XHS有效）
 UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0'
@@ -46,7 +46,7 @@ HEADLESS = False
 SAVE_LOGIN_STATE = True
 
 # 数据保存类型选项配置,支持三种类型：csv、db、json, 最好保存到DB，有排重的功能。
-SAVE_DATA_OPTION = "json"  # csv or db or json
+SAVE_DATA_OPTION = "db"  # csv or db or json
 
 # 用户浏览器缓存的浏览器文件配置
 USER_DATA_DIR = "%s_user_data_dir"  # %s will be replaced by platform name
@@ -133,7 +133,7 @@ TIEBA_CREATOR_URL_LIST = [
 
 # 指定小红书创作者ID列表
 XHS_CREATOR_ID_LIST = [
-    "63e36c9a000000002703502b",
+    "64c087c7000000001403f8e6",
     # ........................
 ]
 
@@ -164,9 +164,9 @@ ZHIHU_CREATOR_URL_LIST = [
 
 # 指定知乎需要爬取的帖子ID列表
 ZHIHU_SPECIFIED_ID_LIST = [
-    "https://www.zhihu.com/question/826896610/answer/4885821440", # 回答
-    "https://zhuanlan.zhihu.com/p/673461588", # 文章
-    "https://www.zhihu.com/zvideo/1539542068422144000" # 视频
+    "https://www.zhihu.com/question/826896610/answer/4885821440",  # 回答
+    "https://zhuanlan.zhihu.com/p/673461588",  # 文章
+    "https://www.zhihu.com/zvideo/1539542068422144000"  # 视频
 ]
 
 # 词云相关

@@ -93,20 +93,21 @@ class XiaoHongShuCrawler(AbstractCrawler):
                     browser_context=self.browser_context
                 )
 
-            crawler_type_var.set(config.CRAWLER_TYPE)
-            if config.CRAWLER_TYPE == "search":
-                # Search for notes and retrieve their comment information.
-                await self.search()
-            elif config.CRAWLER_TYPE == "detail":
-                # Get the information and comments of the specified post
-                await self.get_specified_notes()
-            elif config.CRAWLER_TYPE == "creator":
-                # Get creator's information and their notes and comments
-                await self.get_creators_and_notes()
-            else:
-                pass
+            # crawler_type_var.set(config.CRAWLER_TYPE)
+            # if config.CRAWLER_TYPE == "search":
+            #     # Search for notes and retrieve their comment information.
+            #     await self.search()
+            # elif config.CRAWLER_TYPE == "detail":
+            #     # Get the information and comments of the specified post
+            #     await self.get_specified_notes()
+            # elif config.CRAWLER_TYPE == "creator":
+            #     # Get creator's information and their notes and comments
+            #     await self.get_creators_and_notes()
+            # else:
+            #     pass
 
-            utils.logger.info("[XiaoHongShuCrawler.start] Xhs Crawler finished ...")
+            utils.logger.info(
+                "[XiaoHongShuCrawler.start] Xhs Crawler start ...")
 
     async def search(self) -> None:
         """Search for notes and retrieve their comment information."""
@@ -128,7 +129,8 @@ class XiaoHongShuCrawler(AbstractCrawler):
                 page - start_page + 1
             ) * xhs_limit_count <= config.CRAWLER_MAX_NOTES_COUNT:
                 if page < start_page:
-                    utils.logger.info(f"[XiaoHongShuCrawler.search] Skip page {page}")
+                    utils.logger.info(
+                        f"[XiaoHongShuCrawler.search] Skip page {page}")
                     page += 1
                     continue
 
@@ -200,7 +202,8 @@ class XiaoHongShuCrawler(AbstractCrawler):
             if config.ENABLE_IP_PROXY:
                 crawl_interval = random.random()
             else:
-                crawl_interval = random.uniform(1, config.CRAWLER_MAX_SLEEP_SEC)
+                crawl_interval = random.uniform(
+                    1, config.CRAWLER_MAX_SLEEP_SEC)
             # Get all note information of the creator
             all_notes_list = await self.xhs_client.get_all_notes_by_creator(
                 user_id=user_id,
@@ -244,7 +247,8 @@ class XiaoHongShuCrawler(AbstractCrawler):
         """
         get_note_detail_task_list = []
         for full_note_url in config.XHS_SPECIFIED_NOTE_URL_LIST:
-            note_url_info: NoteUrlInfo = parse_note_info_from_note_url(full_note_url)
+            note_url_info: NoteUrlInfo = parse_note_info_from_note_url(
+                full_note_url)
             utils.logger.info(
                 f"[XiaoHongShuCrawler.get_specified_notes] Parse note url info: {note_url_info}"
             )
@@ -261,7 +265,8 @@ class XiaoHongShuCrawler(AbstractCrawler):
         note_details = await asyncio.gather(*get_note_detail_task_list)
         for note_detail in note_details:
             if note_detail:
-                need_get_comment_note_ids.append(note_detail.get("note_id", ""))
+                need_get_comment_note_ids.append(
+                    note_detail.get("note_id", ""))
                 xsec_tokens.append(note_detail.get("xsec_token", ""))
                 await xhs_store.update_xhs_note(note_detail)
         await self.batch_get_note_comments(need_get_comment_note_ids, xsec_tokens)
@@ -290,7 +295,8 @@ class XiaoHongShuCrawler(AbstractCrawler):
             if config.ENABLE_IP_PROXY:
                 crawl_interval = random.random()
             else:
-                crawl_interval = random.uniform(1, config.CRAWLER_MAX_SLEEP_SEC)
+                crawl_interval = random.uniform(
+                    1, config.CRAWLER_MAX_SLEEP_SEC)
             try:
                 # 尝试直接获取网页版笔记详情，携带cookie
                 note_detail_from_html: Optional[Dict] = (
@@ -370,7 +376,8 @@ class XiaoHongShuCrawler(AbstractCrawler):
             if config.ENABLE_IP_PROXY:
                 crawl_interval = random.random()
             else:
-                crawl_interval = random.uniform(1, config.CRAWLER_MAX_SLEEP_SEC)
+                crawl_interval = random.uniform(
+                    1, config.CRAWLER_MAX_SLEEP_SEC)
             await self.xhs_client.get_note_all_comments(
                 note_id=note_id,
                 xsec_token=xsec_token,
@@ -443,7 +450,8 @@ class XiaoHongShuCrawler(AbstractCrawler):
             )
             return browser_context
         else:
-            browser = await chromium.launch(headless=headless, proxy=playwright_proxy)  # type: ignore
+            # type: ignore
+            browser = await chromium.launch(headless=headless, proxy=playwright_proxy)
             browser_context = await browser.new_context(
                 viewport={"width": 1920, "height": 1080}, user_agent=user_agent
             )
@@ -452,7 +460,8 @@ class XiaoHongShuCrawler(AbstractCrawler):
     async def close(self):
         """Close browser context"""
         await self.browser_context.close()
-        utils.logger.info("[XiaoHongShuCrawler.close] Browser context closed ...")
+        utils.logger.info(
+            "[XiaoHongShuCrawler.close] Browser context closed ...")
 
     async def get_notice_media(self, note_detail: Dict):
         if not config.ENABLE_GET_IMAGES:
