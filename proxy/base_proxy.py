@@ -28,7 +28,6 @@ class ProxyProvider(ABC):
         raise NotImplementedError
 
 
-
 class IpCache:
     def __init__(self):
         self.cache_client: AbstractCache = CacheFactory.create_cache(cache_type=config.CACHE_TYPE_MEMORY)

@@ -51,19 +51,19 @@ class TieBaCrawler(AbstractCrawler):
             ip_pool=ip_proxy_pool,
             default_ip_proxy=httpx_proxy_format,
         )
-        crawler_type_var.set(config.CRAWLER_TYPE)
-        if config.CRAWLER_TYPE == "search":
-            # Search for notes and retrieve their comment information.
-            await self.search()
-            await self.get_specified_tieba_notes()
-        elif config.CRAWLER_TYPE == "detail":
-            # Get the information and comments of the specified post
-            await self.get_specified_notes()
-        elif config.CRAWLER_TYPE == "creator":
-            # Get creator's information and their notes and comments
-            await self.get_creators_and_notes()
-        else:
-            pass
+        # crawler_type_var.set(config.CRAWLER_TYPE)
+        # if config.CRAWLER_TYPE == "search":
+        #     # Search for notes and retrieve their comment information.
+        #     await self.search()
+        #     await self.get_specified_tieba_notes()
+        # elif config.CRAWLER_TYPE == "detail":
+        #     # Get the information and comments of the specified post
+        #     await self.get_specified_notes()
+        # elif config.CRAWLER_TYPE == "creator":
+        #     # Get creator's information and their notes and comments
+        #     await self.get_creators_and_notes()
+        # else:
+        #     pass
 
         utils.logger.info("[BaiduTieBaCrawler.start] Tieba Crawler finished ...")
 

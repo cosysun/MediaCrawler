@@ -4,30 +4,15 @@ import pickle
 import time
 from typing import Any, List
 
-from redis import Redis
-
 from cache.abs_cache import AbstractCache
-from config import db_config
+from cache.iredis import RedisPool
 
 
 class RedisCache(AbstractCache):
 
     def __init__(self) -> None:
         # 连接redis, 返回redis客户端
-        self._redis_client = self._connet_redis()
-
-    @staticmethod
-    def _connet_redis() -> Redis:
-        """
-        连接redis, 返回redis客户端, 这里按需配置redis连接信息
-        :return:
-        """
-        return Redis(
-            host=db_config.REDIS_DB_HOST,
-            port=db_config.REDIS_DB_PORT,
-            db=db_config.REDIS_DB_NUM,
-            password=db_config.REDIS_DB_PWD,
-        )
+        self._redis_client = RedisPool.getConn()
 
     def get(self, key: str) -> Any:
         """
@@ -71,3 +56,4 @@ if __name__ == '__main__':
     redis_cache.set("list", [1, 2, 3], 10)
     _value = redis_cache.get("list")
     print(_value, f"value type:{type(_value)}")  # [1, 2, 3]
+

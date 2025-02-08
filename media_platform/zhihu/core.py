@@ -80,18 +80,18 @@ class ZhihuCrawler(AbstractCrawler):
             await asyncio.sleep(5)
             await self.zhihu_client.update_cookies(browser_context=self.browser_context)
 
-            crawler_type_var.set(config.CRAWLER_TYPE)
-            if config.CRAWLER_TYPE == "search":
-                # Search for notes and retrieve their comment information.
-                await self.search()
-            elif config.CRAWLER_TYPE == "detail":
-                # Get the information and comments of the specified post
-                await self.get_specified_notes()
-            elif config.CRAWLER_TYPE == "creator":
-                # Get creator's information and their notes and comments
-                await self.get_creators_and_notes()
-            else:
-                pass
+            # crawler_type_var.set(config.CRAWLER_TYPE)
+            # if config.CRAWLER_TYPE == "search":
+            #     # Search for notes and retrieve their comment information.
+            #     await self.search()
+            # elif config.CRAWLER_TYPE == "detail":
+            #     # Get the information and comments of the specified post
+            #     await self.get_specified_notes()
+            # elif config.CRAWLER_TYPE == "creator":
+            #     # Get creator's information and their notes and comments
+            #     await self.get_creators_and_notes()
+            # else:
+            #     pass
 
             utils.logger.info("[ZhihuCrawler.start] Zhihu Crawler finished ...")
 

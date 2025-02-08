@@ -63,18 +63,18 @@ class KuaishouCrawler(AbstractCrawler):
                 await login_obj.begin()
                 await self.ks_client.update_cookies(browser_context=self.browser_context)
 
-            crawler_type_var.set(config.CRAWLER_TYPE)
-            if config.CRAWLER_TYPE == "search":
-                # Search for videos and retrieve their comment information.
-                await self.search()
-            elif config.CRAWLER_TYPE == "detail":
-                # Get the information and comments of the specified post
-                await self.get_specified_videos()
-            elif config.CRAWLER_TYPE == "creator":
-                # Get creator's information and their videos and comments
-                await self.get_creators_and_videos()
-            else:
-                pass
+            # crawler_type_var.set(config.CRAWLER_TYPE)
+            # if config.CRAWLER_TYPE == "search":
+            #     # Search for videos and retrieve their comment information.
+            #     await self.search()
+            # elif config.CRAWLER_TYPE == "detail":
+            #     # Get the information and comments of the specified post
+            #     await self.get_specified_videos()
+            # elif config.CRAWLER_TYPE == "creator":
+            #     # Get creator's information and their videos and comments
+            #     await self.get_creators_and_videos()
+            # else:
+            #     pass
 
             utils.logger.info("[KuaishouCrawler.start] Kuaishou Crawler finished ...")
 

@@ -67,18 +67,18 @@ class BilibiliCrawler(AbstractCrawler):
                 await login_obj.begin()
                 await self.bili_client.update_cookies(browser_context=self.browser_context)
 
-            crawler_type_var.set(config.CRAWLER_TYPE)
-            if config.CRAWLER_TYPE == "search":
-                # Search for video and retrieve their comment information.
-                await self.search()
-            elif config.CRAWLER_TYPE == "detail":
-                # Get the information and comments of the specified post
-                await self.get_specified_videos(config.BILI_SPECIFIED_ID_LIST)
-            elif config.CRAWLER_TYPE == "creator":
-                for creator_id in config.BILI_CREATOR_ID_LIST:
-                    await self.get_creator_videos(int(creator_id))
-            else:
-                pass
+            # crawler_type_var.set(config.CRAWLER_TYPE)
+            # if config.CRAWLER_TYPE == "search":
+            #     # Search for video and retrieve their comment information.
+            #     await self.search()
+            # elif config.CRAWLER_TYPE == "detail":
+            #     # Get the information and comments of the specified post
+            #     await self.get_specified_videos(config.BILI_SPECIFIED_ID_LIST)
+            # elif config.CRAWLER_TYPE == "creator":
+            #     for creator_id in config.BILI_CREATOR_ID_LIST:
+            #         await self.get_creator_videos(int(creator_id))
+            # else:
+            #     pass
             utils.logger.info(
                 "[BilibiliCrawler.start] Bilibili Crawler finished ...")
 
