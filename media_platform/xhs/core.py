@@ -14,8 +14,9 @@ import os
 import random
 import time
 from asyncio import Task
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Literal, LiteralString, Optional, Tuple
 
+import playwright
 from playwright.async_api import BrowserContext, BrowserType, Page, async_playwright
 from tenacity import RetryError
 
@@ -45,7 +46,7 @@ class XiaoHongShuCrawler(AbstractCrawler):
         # self.user_agent = utils.get_user_agent()
         self.user_agent = config.UA if config.UA else "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 
-    async def start(self) -> None:
+    async def crawl(self, type, keywords: list[str] = []):
         playwright_proxy_format, httpx_proxy_format = None, None
         if config.ENABLE_IP_PROXY:
             ip_proxy_pool = await create_ip_pool(
@@ -93,23 +94,25 @@ class XiaoHongShuCrawler(AbstractCrawler):
                     browser_context=self.browser_context
                 )
 
-            # crawler_type_var.set(config.CRAWLER_TYPE)
-            # if config.CRAWLER_TYPE == "search":
-            #     # Search for notes and retrieve their comment information.
-            #     await self.search()
-            # elif config.CRAWLER_TYPE == "detail":
-            #     # Get the information and comments of the specified post
-            #     await self.get_specified_notes()
-            # elif config.CRAWLER_TYPE == "creator":
-            #     # Get creator's information and their notes and comments
-            #     await self.get_creators_and_notes()
-            # else:
-            #     pass
+            if type == "search":
+                # Search for notes and retrieve their comment information.
+                await self.search(keywords)
+            elif type == "detail":
+                # Get the information and comments of the specified post
+                await self.get_specified_notes(keywords)
+            elif type == "creator":
+                # Get creator's information and their notes and comments
+                await self.get_creators_and_notes(keywords)
+            else:
+                pass
 
             utils.logger.info(
                 "[XiaoHongShuCrawler.start] Xhs Crawler start ...")
 
-    async def search(self) -> None:
+    async def start(self):
+        pass
+        
+    async def search(self, keywords: list[str]) -> None:
         """Search for notes and retrieve their comment information."""
         utils.logger.info(
             "[XiaoHongShuCrawler.search] Begin search xiaohongshu keywords"
@@ -118,7 +121,7 @@ class XiaoHongShuCrawler(AbstractCrawler):
         if config.CRAWLER_MAX_NOTES_COUNT < xhs_limit_count:
             config.CRAWLER_MAX_NOTES_COUNT = xhs_limit_count
         start_page = config.START_PAGE
-        for keyword in config.KEYWORDS.split(","):
+        for keyword in keywords:
             source_keyword_var.set(keyword)
             utils.logger.info(
                 f"[XiaoHongShuCrawler.search] Current search keyword: {keyword}"
@@ -178,26 +181,30 @@ class XiaoHongShuCrawler(AbstractCrawler):
                     utils.logger.info(
                         f"[XiaoHongShuCrawler.search] Note details: {note_details}"
                     )
-                    await self.batch_get_note_comments(note_ids, xsec_tokens)
+                    # await self.batch_get_note_comments(note_ids, xsec_tokens)
                 except DataFetchError:
                     utils.logger.error(
                         "[XiaoHongShuCrawler.search] Get note detail error"
                     )
                     break
 
-    async def get_creators_and_notes(self) -> None:
+    async def get_creators_and_notes(self, creators: list[str]) -> None:
         """Get creator's notes and retrieve their comment information."""
         utils.logger.info(
             "[XiaoHongShuCrawler.get_creators_and_notes] Begin get xiaohongshu creators"
         )
-        for user_id in config.XHS_CREATOR_ID_LIST:
+        
+        for user_id in creators:
             # get creator detail info from web html content
+            print(f"user_id: {user_id}")
             createor_info: Dict = await self.xhs_client.get_creator_info(
                 user_id=user_id
             )
+            print(f"user_id2: {user_id}")
             if createor_info:
                 await xhs_store.save_creator(user_id, creator=createor_info)
 
+            print(f"user_id3: {createor_info}")
             # When proxy is not enabled, increase the crawling interval
             if config.ENABLE_IP_PROXY:
                 crawl_interval = random.random()
@@ -238,7 +245,7 @@ class XiaoHongShuCrawler(AbstractCrawler):
             if note_detail:
                 await xhs_store.update_xhs_note(note_detail)
 
-    async def get_specified_notes(self):
+    async def get_specified_notes(self, note_urls: List[str]):
         """
         Get the information and comments of the specified post
         must be specified note_id, xsec_source, xsec_token⚠️⚠️⚠️
@@ -246,7 +253,7 @@ class XiaoHongShuCrawler(AbstractCrawler):
 
         """
         get_note_detail_task_list = []
-        for full_note_url in config.XHS_SPECIFIED_NOTE_URL_LIST:
+        for full_note_url in note_urls:
             note_url_info: NoteUrlInfo = parse_note_info_from_note_url(
                 full_note_url)
             utils.logger.info(
@@ -305,16 +312,16 @@ class XiaoHongShuCrawler(AbstractCrawler):
                     )
                 )
                 time.sleep(crawl_interval)
-                if not note_detail_from_html:
-                    # 如果网页版笔记详情获取失败，则尝试不使用cookie获取
-                    note_detail_from_html = (
-                        await self.xhs_client.get_note_by_id_from_html(
-                            note_id, xsec_source, xsec_token, enable_cookie=False
-                        )
-                    )
-                    utils.logger.error(
-                        f"[XiaoHongShuCrawler.get_note_detail_async_task] Get note detail error, note_id: {note_id}"
-                    )
+                # if not note_detail_from_html:
+                #     # 如果网页版笔记详情获取失败，则尝试不使用cookie获取
+                #     note_detail_from_html = (
+                #         await self.xhs_client.get_note_by_id_from_html(
+                #             note_id, xsec_source, xsec_token, enable_cookie=False
+                #         )
+                #     )
+                #     utils.logger.error(
+                #         f"[XiaoHongShuCrawler.get_note_detail_async_task] Get note detail error, note_id: {note_id}"
+                #     )
                 if not note_detail_from_html:
                     # 如果网页版笔记详情获取失败，则尝试API获取
                     note_detail_from_api: Optional[Dict] = (
@@ -338,6 +345,7 @@ class XiaoHongShuCrawler(AbstractCrawler):
                     f"[XiaoHongShuCrawler.get_note_detail_async_task] have not fund note detail note_id:{note_id}, err: {ex}"
                 )
                 return None
+
 
     async def batch_get_note_comments(
         self, note_list: List[str], xsec_tokens: List[str]

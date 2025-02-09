@@ -71,6 +71,12 @@ async def update_xhs_note(note_item: Dict):
             img.update({'url': img.get('url_default')})
 
     video_url = ','.join(get_video_url_arr(note_item))
+    # 'liked_count': '10+', 'collected_count': '10+', 'comment_count': '10+', 'share_count': '10+'
+    # 转换为数字
+    interact_info["liked_count"] = transform_note_count(interact_info.get("liked_count"))
+    interact_info["collected_count"] = transform_note_count(interact_info.get("collected_count"))
+    interact_info["comment_count"] = transform_note_count(interact_info.get("comment_count"))
+    interact_info["share_count"] = transform_note_count(interact_info.get("share_count"))
 
     local_db_item = {
         "note_id": note_item.get("note_id"), # 帖子id
@@ -98,6 +104,17 @@ async def update_xhs_note(note_item: Dict):
     utils.logger.info(f"[store.xhs.update_xhs_note] xhs note: {local_db_item}")
     await XhsStoreFactory.create_store().store_content(local_db_item)
 
+
+def transform_note_count(note_count: str) -> str:
+    """Transform note count"""
+    if '万' in note_count:
+        return str(int(float(note_count.replace('万', '')) * 10000))
+    elif '千' in note_count:
+        return str(int(float(note_count.replace('千', '')) * 1000))
+    elif '+' in note_count:
+        return note_count.replace('+', '')
+    else:
+        return note_count
 
 async def batch_update_xhs_note_comments(note_id: str, comments: List[Dict]):
     """

@@ -66,7 +66,6 @@ class BilibiliCrawler(AbstractCrawler):
                 )
                 await login_obj.begin()
                 await self.bili_client.update_cookies(browser_context=self.browser_context)
-
             # crawler_type_var.set(config.CRAWLER_TYPE)
             # if config.CRAWLER_TYPE == "search":
             #     # Search for video and retrieve their comment information.
@@ -79,10 +78,14 @@ class BilibiliCrawler(AbstractCrawler):
             #         await self.get_creator_videos(int(creator_id))
             # else:
             #     pass
+
             utils.logger.info(
                 "[BilibiliCrawler.start] Bilibili Crawler finished ...")
+    
+    async def crawl(self, type, keywords: list[str] = []):
+        pass
 
-    async def search(self):
+    async def search(self, keywords: list[str] = []):
         """
         search bilibili video with keywords
         :return:
@@ -93,7 +96,7 @@ class BilibiliCrawler(AbstractCrawler):
         if config.CRAWLER_MAX_NOTES_COUNT < bili_limit_count:
             config.CRAWLER_MAX_NOTES_COUNT = bili_limit_count
         start_page = config.START_PAGE  # start page number
-        for keyword in config.KEYWORDS.split(","):
+        for keyword in keywords:
             source_keyword_var.set(keyword)
             utils.logger.info(
                 f"[BilibiliCrawler.search] Current search keyword: {keyword}")

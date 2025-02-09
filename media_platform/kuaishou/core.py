@@ -78,6 +78,9 @@ class KuaishouCrawler(AbstractCrawler):
 
             utils.logger.info("[KuaishouCrawler.start] Kuaishou Crawler finished ...")
 
+    async def crawl(self, type, keywords: list[str] = []):
+        pass
+    
     async def search(self):
         utils.logger.info("[KuaishouCrawler.search] Begin search kuaishou keywords")
         ks_limit_count = 20  # kuaishou limit page fixed value

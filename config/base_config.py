@@ -11,7 +11,6 @@
 
 # 基础配置
 PLATFORM = "xhs"
-KEYWORDS = "编程副业,编程兼职"  # 关键词搜索配置，以英文逗号分隔
 LOGIN_TYPE = "cookie"  # qrcode or phone or cookie
 COOKIES = "acw_tc=0a00d86f17384716962788648e3e297bd873d910b7ee532b9fb8a7b10a5819;abRequestId=42fef2fd-9b27-5ea4-b22b-2a138dcdd5b6;webBuild=4.55.1;a1=194c4fcecf0a3kd61ryk7qif88w1ahlj4b4qdt9tb30000283450;webId=85076ba1b03667240310e68cc9fc080c;websectiga=3fff3a6f9f07284b62c0f2ebf91a3b10193175c06e4f71492b60e056edcdebb2;sec_poison_id=8667f086-4946-4b61-998a-59fde9406a15;gid=yj4S4iSif84fyj4S4iSdSD9ji80qTfKyFvTW49DA3iYYEAq8y0x1Vf888JYq4288yjYijDyf;web_session=0400694b8b14ca53ac3542b1ab354bea25477d;xsecappid=xhs-pc-web"
 # 具体值参见media_platform.xxx.field下的枚举值，暂时只支持小红书
@@ -55,7 +54,7 @@ USER_DATA_DIR = "%s_user_data_dir"  # %s will be replaced by platform name
 START_PAGE = 1
 
 # 爬取视频/帖子的数量控制
-CRAWLER_MAX_NOTES_COUNT = 200
+CRAWLER_MAX_NOTES_COUNT = 100
 
 # 并发爬虫数量控制
 MAX_CONCURRENCY_NUM = 1
@@ -80,12 +79,6 @@ ENABLE_GET_SUB_COMMENTS = False
 #     "66fad51c000000001b0224b8",
 #     # ........................
 # ]
-
-# 指定小红书需要爬虫的笔记URL列表, 目前要携带xsec_token和xsec_source参数
-XHS_SPECIFIED_NOTE_URL_LIST = [
-    "https://www.xiaohongshu.com/explore/66fad51c000000001b0224b8?xsec_token=AB3rO-QopW5sgrJ41GwN01WCXh6yWPxjSoFI9D5JIMgKw=&xsec_source=pc_search"
-    # ........................
-]
 
 
 # 指定抖音需要爬取的ID列表

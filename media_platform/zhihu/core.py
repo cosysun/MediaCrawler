@@ -95,6 +95,9 @@ class ZhihuCrawler(AbstractCrawler):
 
             utils.logger.info("[ZhihuCrawler.start] Zhihu Crawler finished ...")
 
+    async def crawl(self, type, keywords: list[str] = []):
+        pass
+
     async def search(self) -> None:
         """Search for notes and retrieve their comment information."""
         utils.logger.info("[ZhihuCrawler.search] Begin search zhihu keywords")

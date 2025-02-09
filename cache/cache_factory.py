@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# @Name    : 程序员阿江-Relakkes
-# @Time    : 2024/6/2 11:23
-# @Desc    :
-
-
 class CacheFactory:
     """
     缓存工厂类

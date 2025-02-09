@@ -1,28 +1,37 @@
-import threading
+import asyncio
 import schedule
 import time
+from base import base_crawler
 from cache import iredis
 from tools import utils
+from crawlers import CrawlerManager
 
 
-def process_crawler_task():
+async def process_crawler_task():
     try:
-        task = iredis.pop_crawler_task()
+        task = iredis.pop_crawler_task("creator")
         if not task:
             utils.logger.info("No task to process.")
             return
-        # todo
+
+        crawler = await CrawlerManager.get_crawler(task["platform"])
+        if crawler:
+            await crawler.crawl(base_crawler.CREATOR, [task["creator_id"]])
+        else:
+            utils.logger.error(f"Invalid crawler for platform: {task['platform']}")
+        
     except Exception as e:
         utils.logger.error(f"process_crawler_task 发生错误, err: {str(e)}")
 
 
-def start():
-    schedule.every(10).seconds.do(process_crawler_task)
+async def run_schedule():
+    while True:
+        schedule.run_pending()
+        await asyncio.sleep(1)
 
-    def run_schedule():
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
 
-    schedule_thread = threading.Thread(target=run_schedule)
-    schedule_thread.start()
+if __name__ == "__main__":
+    schedule.every(10).seconds.do(lambda: asyncio.create_task(process_crawler_task()))
+
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(run_schedule())

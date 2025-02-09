@@ -3,6 +3,9 @@ from typing import Dict, Optional
 
 from playwright.async_api import BrowserContext, BrowserType
 
+SEARCH = "search"
+DETAIL = "detail"
+CREATOR = "creator"
 
 class AbstractCrawler(ABC):
     @abstractmethod
@@ -13,9 +16,9 @@ class AbstractCrawler(ABC):
         pass
 
     @abstractmethod
-    async def search(self):
+    async def crawl(self, type, keywords: list[str]):
         """
-        search
+        crawl content
         """
         pass
 

@@ -67,6 +67,9 @@ class TieBaCrawler(AbstractCrawler):
 
         utils.logger.info("[BaiduTieBaCrawler.start] Tieba Crawler finished ...")
 
+    async def crawl(self, type, keywords: list[str] = []):
+        pass
+
     async def search(self) -> None:
         """
         Search for notes and retrieve their comment information.

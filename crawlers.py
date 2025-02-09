@@ -36,7 +36,7 @@ class CrawlerManager:
         cls._crawlers[platform_name] = crawler_instance
 
     @classmethod
-    def get_crawler(cls, platform_name):
+    async def get_crawler(cls, platform_name):
         crawler = cls._crawlers.get(platform_name)
         if not crawler:
             crawler = CrawlerFactory.create_crawler(platform_name)
