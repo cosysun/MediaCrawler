@@ -16,7 +16,7 @@ class AbstractCrawler(ABC):
         pass
 
     @abstractmethod
-    async def crawl(self, type, keywords: list[str]):
+    async def crawl(self, type, keywords: list[str], count: int = 100):
         """
         crawl content
         """

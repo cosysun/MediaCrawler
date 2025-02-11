@@ -95,7 +95,7 @@ class ZhihuCrawler(AbstractCrawler):
 
             utils.logger.info("[ZhihuCrawler.start] Zhihu Crawler finished ...")
 
-    async def crawl(self, type, keywords: list[str] = []):
+    async def crawl(self, type, keywords: list[str] = [], count: int = 100):
         pass
 
     async def search(self) -> None:

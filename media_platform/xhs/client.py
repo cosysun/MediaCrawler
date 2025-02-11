@@ -477,6 +477,7 @@ class XiaoHongShuClient(AbstractApiClient):
         self,
         user_id: str,
         crawl_interval: float = 1.0,
+        count: int = 100,
         callback: Optional[Callable] = None,
     ) -> List[Dict]:
         """
@@ -493,7 +494,7 @@ class XiaoHongShuClient(AbstractApiClient):
         notes_has_more = True
         notes_cursor = ""
         curr_count = 0
-        while notes_has_more and curr_count < config.CRAWLER_MAX_NOTES_COUNT:
+        while notes_has_more and curr_count < count:
             notes_res = await self.get_notes_by_creator(user_id, notes_cursor)
             if not notes_res:
                 utils.logger.error(

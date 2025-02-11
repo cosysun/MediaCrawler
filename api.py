@@ -48,6 +48,7 @@ async def crawl_creator_data():
         platform = data.get("platform")
         creator_id = data.get("creator_id")
         user_id = data.get("user_id")
+        count = data.get("count")
         # 检查是否提供了必要的参数
         if not platform or not creator_id or not user_id:
             return jsonify({"error": "缺少必要的参数"}), 400
@@ -55,7 +56,8 @@ async def crawl_creator_data():
         task = {
             "platform": platform,
             "creator_id": creator_id,
-            "user_id": user_id
+            "user_id": user_id,
+            "count": count
         }
         # 将任务信息写入Redis
         iredis.push_crawler_task("creator", task)

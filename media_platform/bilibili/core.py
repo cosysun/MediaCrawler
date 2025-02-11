@@ -82,7 +82,7 @@ class BilibiliCrawler(AbstractCrawler):
             utils.logger.info(
                 "[BilibiliCrawler.start] Bilibili Crawler finished ...")
     
-    async def crawl(self, type, keywords: list[str] = []):
+    async def crawl(self, type, keywords: list[str] = [], count: int = 100):
         pass
 
     async def search(self, keywords: list[str] = []):

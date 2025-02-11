@@ -46,7 +46,7 @@ class XiaoHongShuCrawler(AbstractCrawler):
         # self.user_agent = utils.get_user_agent()
         self.user_agent = config.UA if config.UA else "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"
 
-    async def crawl(self, type, keywords: list[str] = []):
+    async def crawl(self, type, keywords: list[str] = [], count: int = 100):
         playwright_proxy_format, httpx_proxy_format = None, None
         if config.ENABLE_IP_PROXY:
             ip_proxy_pool = await create_ip_pool(
@@ -102,7 +102,7 @@ class XiaoHongShuCrawler(AbstractCrawler):
                 await self.get_specified_notes(keywords)
             elif type == "creator":
                 # Get creator's information and their notes and comments
-                await self.get_creators_and_notes(keywords)
+                await self.get_creators_and_notes(keywords, count)
             else:
                 pass
 
@@ -188,7 +188,7 @@ class XiaoHongShuCrawler(AbstractCrawler):
                     )
                     break
 
-    async def get_creators_and_notes(self, creators: list[str]) -> None:
+    async def get_creators_and_notes(self, creators: list[str], count) -> None:
         """Get creator's notes and retrieve their comment information."""
         utils.logger.info(
             "[XiaoHongShuCrawler.get_creators_and_notes] Begin get xiaohongshu creators"
@@ -196,15 +196,12 @@ class XiaoHongShuCrawler(AbstractCrawler):
         
         for user_id in creators:
             # get creator detail info from web html content
-            print(f"user_id: {user_id}")
             createor_info: Dict = await self.xhs_client.get_creator_info(
                 user_id=user_id
             )
-            print(f"user_id2: {user_id}")
             if createor_info:
                 await xhs_store.save_creator(user_id, creator=createor_info)
 
-            print(f"user_id3: {createor_info}")
             # When proxy is not enabled, increase the crawling interval
             if config.ENABLE_IP_PROXY:
                 crawl_interval = random.random()
@@ -215,6 +212,7 @@ class XiaoHongShuCrawler(AbstractCrawler):
             all_notes_list = await self.xhs_client.get_all_notes_by_creator(
                 user_id=user_id,
                 crawl_interval=crawl_interval,
+                count=count,
                 callback=self.fetch_creator_notes_detail,
             )
 
@@ -223,7 +221,7 @@ class XiaoHongShuCrawler(AbstractCrawler):
             for note_item in all_notes_list:
                 note_ids.append(note_item.get("note_id"))
                 xsec_tokens.append(note_item.get("xsec_token"))
-            await self.batch_get_note_comments(note_ids, xsec_tokens)
+            # await self.batch_get_note_comments(note_ids, xsec_tokens)
 
     async def fetch_creator_notes_detail(self, note_list: List[Dict]):
         """

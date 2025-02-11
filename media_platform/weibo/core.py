@@ -89,7 +89,7 @@ class WeiboCrawler(AbstractCrawler):
             #     pass
             utils.logger.info("[WeiboCrawler.start] Weibo Crawler finished ...")
 
-    async def crawl(self, type, keywords: list[str] = []):
+    async def crawl(self, type, keywords: list[str] = [], count: int = 100):
         pass
 
     async def search(self):
