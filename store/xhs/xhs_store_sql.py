@@ -33,7 +33,7 @@ async def query_content() -> List[Dict]:
         List[Dict]: 返回内容记录列表
     """
     async_db_conn: AsyncMysqlDB = await DBPool.get_db()
-    sql: str = "select title, `desc`, tag_list from xhs_note where type = 'normal' and liked_count >= 1000 and collected_count >= 100 and comment_count > 100 limit 10"
+    sql: str = "select title, `desc`, tag_list from xhs_note where type = 'normal' and liked_count >= 100 and collected_count >= 1 and comment_count > 0"
     rows: List[Dict] = await async_db_conn.query(sql)
     return rows
 
